@@ -3,6 +3,7 @@ from datetime import datetime as dt
 import requests
 # pip install python-dotenv
 from dotenv import load_dotenv
+from  flask import  jsonify
 import os
 
 load_dotenv()
@@ -38,13 +39,27 @@ def get_weather(city):
                 "sunset": dt.fromtimestamp(data["sys"]["sunset"]).strftime("%H:%M:%S")
             }
 
-            return weather
+            return jsonify(
+                {
+                    "Weather":weather
+                }
+            ),200
+
         else:
-            return None
+            return jsonify(
+                {
+                    "error":"None"
+                }
+            ),500
 
     except Exception as e:
         print(f"Error occurred in {e}")
+        return  jsonify(
+            {
+                "error":f"{str(e)}"
+            }
+        ),500
 
-
+#Test it using postman get request
 print(get_weather("Nairobi"))
 
